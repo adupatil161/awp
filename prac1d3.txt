@@ -1,0 +1,27 @@
+using System;
+class prac1d3{
+public static void Main(string[] args)
+{
+char ch;
+Console.WriteLine("Enter any character: ");
+        ch = Convert.ToChar(Console.ReadLine());
+ 
+ 
+        
+        if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u' )
+{
+ 
+            Console.WriteLine(ch + " is Vowel.");
+ 
+        }
+        else if ((ch >= 'a' && ch <= 'z') 
+        {
+            Console.WriteLine(ch + " is not vowel.");  
+        }
+ 
+        Console.ReadLine();
+    }
+}
+
+
+
