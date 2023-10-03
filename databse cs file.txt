@@ -1,0 +1,91 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Text;
+using System.Data.SqlClient;
+ 
+
+namespace WebApplication3
+{
+    public partial class _Default : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            SqlConnection myConnection = new SqlConnection();
+            //    myConnection.DataSource = "C:/Users/Lenovo/OneDrive - V. G. Vaze College of Arts, Science and Commerce/Documents/sample.sdf";
+            myConnection.ConnectionString = "Data Source=.;Initial Catalog=master;Integrated Security=True";
+
+
+            try
+            {
+                // Try to open the connection.
+                myConnection.Open();
+                lblInfo.Text = "<b>Server Version:</b> " + myConnection.ServerVersion;
+                lblInfo.Text += "<br /><b>Connection Is:</b> " +
+                myConnection.State.ToString();
+            }
+            catch (Exception err)
+            {
+                // Handle an error by displaying the information.
+                lblInfo.Text = "Error reading the database. ";
+                lblInfo.Text += err.Message;
+            }
+            finally
+            {
+                // Either way, make sure the connection is properly closed.
+                // (Even if the connection wasn't opened successfully,
+                // calling Close() won't cause an error.)
+                myConnection.Close();
+                lblInfo.Text += "<br /><b>Now Connection Is:</b> ";
+                lblInfo.Text += myConnection.State.ToString();
+            }
+        }
+
+        protected void Button2_Click(object sender, EventArgs e)
+        {
+            SqlConnection con = new SqlConnection("Data Source=.;Initial Catalog=master;Integrated Security=True");
+            // con.ConnectionString = "Data Source=.;Initial Catalog=master;Integrated Security=True";
+            // con.Open();
+            //SqlDataReader reader;
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Student_master", con);
+            //reader = myCommand.ExecuteReader();
+
+            ListBox1.Items.Clear();
+
+            SqlDataReader reader;
+            // Try to open database and read information.
+            try
+            {
+                con.Open();
+                reader = cmd.ExecuteReader();
+                // For each item, add the author name to the displayed
+                // list box text, and store the unique ID in the Value property.
+                while (reader.Read())
+                {
+                    ListItem newItem = new ListItem();
+                    newItem.Text = reader["control_id"].ToString();
+                    newItem.Value = reader["control_id"].ToString();
+                    ListBox1.Items.Add(newItem);
+                }
+                reader.Close();
+            }
+            catch (Exception err)
+            {
+                lblInfo1.Text = "Error reading list of names. ";
+                lblInfo1.Text += err.Message;
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+    }
+}
