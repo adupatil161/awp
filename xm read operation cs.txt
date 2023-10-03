@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.IO;
+using System.Xml;
+
+public partial class _Default : System.Web.UI.Page
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        string file = Path.Combine(Request.PhysicalApplicationPath,@"XMLFile.xml");
+        FileStream fs = new FileStream(file, FileMode.Open);
+        XmlTextReader r = new XmlTextReader(fs);
+        // Use a StringWriter to build up a string of HTML that
+        // describes the information read from the XML document.
+        StringWriter writer = new StringWriter();
+        // Parse the file, and read each node.
+        while (r.Read())
+        {
+            // Skip whitespace.
+            if (r.NodeType == XmlNodeType.Whitespace) continue;
+            writer.Write("<b>Type:</b> ");
+            writer.Write(r.NodeType.ToString());
+            writer.Write("<br>");
+            // The name is available when reading the opening and closing tags
+            // for an element. It’s not available when reading the inner content.
+            if (r.Name != "")
+            {
+                writer.Write("<b>Name:</b> ");
+                writer.Write(r.Name);
+                writer.Write("<br>");
+            }
+            // The value is when reading the inner content.
+            if (r.Value != "")
+            {
+                writer.Write("<b>Value:</b> ");
+                writer.Write(r.Value);
+                writer.Write("<br>");
+            }
+            if (r.AttributeCount > 0)
+            {
+                writer.Write("<b>Attributes:</b> ");
+                for (int i = 0; i < r.AttributeCount; i++)
+                {
+                    writer.Write(" ");
+                    writer.Write(r.GetAttribute(i));
+                    writer.Write(" ");
+                }
+                writer.Write("<br>");
+            }
+            writer.Write("<br>");
+        }
+        fs.Close();
+        lblxml.Text = writer.ToString();
+    }
+}
